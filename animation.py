@@ -42,7 +42,7 @@ def animate(i):
         x = pd.to_datetime(data["time"])
         y1 = data["close_price"]
         plt.plot(x, y1, label=symbol)
-        plt.plot(x, data["open_price"], label=f"{symbol} open", alpha=0.4)
+        plt.plot(x, data["open_price"], label=f"{symbol} open", alpha=0.2)
 
     plt.xticks(rotation=30)
     plt.gca().xaxis.set_major_formatter(myFmt)
