@@ -1,4 +1,5 @@
 from pprint import pprint
+from time import sleep
 import unicorn_binance_websocket_api
 
 import pandas as pd
@@ -62,6 +63,7 @@ ITER_PER_LOG = 5
 while True:
     data, dataframe = process_stream(ubwa)
     if dataframe is None:
+        sleep(0.1)
         continue
     i = (i + 1) % ITER_PER_LOG
     # print(f"\r{i}         ", end="")
