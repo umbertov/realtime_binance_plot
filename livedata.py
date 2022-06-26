@@ -26,7 +26,7 @@ database_path = argv[1] if len(argv) > 1 else "LiveData.db"
 engine = create_engine(f"sqlite:///{database_path}")
 
 ubwa = unicorn_binance_websocket_api.BinanceWebSocketApiManager(exchange="binance.com")
-ubwa.create_stream(["kline_1m"], symbols, output="UnicornFy")
+ubwa.create_stream(["trade"], symbols, output="UnicornFy")
 
 
 def process_stream(stream):
@@ -39,20 +39,19 @@ def process_stream(stream):
 
 
 def to_dataframe(data):
-    time = data["event_time"]
-    coin = data["symbol"]
-    price = data["kline"]["close_price"]
-    open_price = data["kline"]["open_price"]
+    time = data["trade_time"]
+    price = data["price"]
+    qty = data["quantity"]
     frame = pd.DataFrame(
         {
             "time": [time],
-            "close_price": [price],
-            "open_price": [open_price],
+            "price": [price],
+            "quantity": [qty],
         }
     )
     frame.time = pd.to_datetime(frame.time, unit="ms")
-    frame.close_price = frame.close_price.astype(float)
-    frame.open_price = frame.open_price.astype(float)
+    frame.price = frame.price.astype(float)
+    frame.quantity = frame.quantity.astype(float)
     return frame
 
 

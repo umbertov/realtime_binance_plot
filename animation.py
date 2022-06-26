@@ -41,15 +41,16 @@ def qry(symbol: str, lookback_minutes: int) -> pd.DataFrame:
 def animate(i):
     # data: pd.DataFrame = pd.read_sql("data.csv")
     plt.cla()
+    dfs = pd.DataFrame()
     for symbol in symbols:
         data: pd.DataFrame = qry(symbol, lookback_minutes=lookback_minutes)
         data.index = pd.to_datetime(data["time"]) + pd.to_timedelta("2h")
-        data = (
-            data.resample("500ms").agg("mean").interpolate().ffill()
-        )  # .resample("1s").agg("mean")
-        y1: pd.Series = data["close_price"]
-        plt.plot(data.index, y1, label=symbol)
-        plt.plot(data.index, y1.ewm(span=60).mean(), label=f"{symbol} sma60", alpha=0.5)
+        plt.plot(data.index, data["price"], label=symbol)
+        # plt.plot(data.index, data['price'].ewm(span=60).mean(), label=f"{symbol} sma60", alpha=0.5)
+        dfs[symbol] = data["price"].resample("1S").mean().ffill()
+
+    mean = dfs.mean(axis="columns")
+    plt.plot(mean.index, mean, label="Mean")
 
     plt.xticks(rotation=30)
     plt.gca().xaxis.set_major_formatter(myFmt)
@@ -61,7 +62,7 @@ def animate(i):
 print(f"ci stanno {len(symbols)} simboli.")
 pprint(symbols)
 
-ani = FuncAnimation(plt.gcf(), animate, interval=2000)
+ani = FuncAnimation(plt.gcf(), animate, interval=500)
 
 plt.tight_layout()
 plt.show()
