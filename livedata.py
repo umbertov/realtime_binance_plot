@@ -6,7 +6,16 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 # from symbols import symbols
-symbols = ["BTCUSDT", "BTCBUSD", "BTCUSDC"]
+symbols = [
+    "BTCUSDT",
+    "BTCBUSD",
+    "BTCUSDC",
+    "ETHUSDC",
+    "ETHUSDT",
+    "ETHBUSD",
+    "SOLUSDT",
+    "SOLUSDC",
+]
 
 from sys import argv
 
